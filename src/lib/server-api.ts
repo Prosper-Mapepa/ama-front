@@ -21,6 +21,11 @@ type FetchConfig = {
   tags?: string[]
 }
 
+function logFetchError(resource: string, error: unknown) {
+  const message = error instanceof Error ? error.message : String(error)
+  console.warn(`[server-api] Failed to fetch ${resource}: ${message}`)
+}
+
 async function fetchApi<T>(path: string, config: FetchConfig = {}): Promise<T> {
   const revalidate =
     typeof config.revalidate === "number" && config.revalidate >= 0
@@ -58,61 +63,86 @@ async function fetchApi<T>(path: string, config: FetchConfig = {}): Promise<T> {
 }
 
 export async function getPageSections(page: "home" | "about", config?: FetchConfig) {
-  return fetchApi<PageSectionPayload[]>(`/page-sections?page=${page}`, {
-    tags: ["page-sections", page, ...(config?.tags ?? [])],
-    revalidate: config?.revalidate,
-  })
+  try {
+    return await fetchApi<PageSectionPayload[]>(`/page-sections?page=${page}`, {
+      tags: ["page-sections", page, ...(config?.tags ?? [])],
+      revalidate: config?.revalidate,
+    })
+  } catch (error) {
+    logFetchError(`page sections for "${page}"`, error)
+    return []
+  }
 }
 
 export async function getEvents(config?: FetchConfig) {
-  const events = await fetchApi<EventPayload[]>(`/events`, {
-    tags: ["events", ...(config?.tags ?? [])],
-    revalidate: config?.revalidate,
-  })
-
-  return events
-    .map((event) => ({
-      ...event,
-      date: event.date,
-    }))
-    .sort((a, b) => {
-      const dateA = new Date(a.date ?? "").getTime()
-      const dateB = new Date(b.date ?? "").getTime()
-      return dateA - dateB
+  try {
+    const events = await fetchApi<EventPayload[]>(`/events`, {
+      tags: ["events", ...(config?.tags ?? [])],
+      revalidate: config?.revalidate,
     })
+
+    return events
+      .map((event) => ({
+        ...event,
+        date: event.date,
+      }))
+      .sort((a, b) => {
+        const dateA = new Date(a.date ?? "").getTime()
+        const dateB = new Date(b.date ?? "").getTime()
+        return dateA - dateB
+      })
+  } catch (error) {
+    logFetchError("events", error)
+    return []
+  }
 }
 
 export async function getTeamMembers(config?: FetchConfig) {
-  const members = await fetchApi<TeamMemberPayload[]>(`/team`, {
-    tags: ["team", ...(config?.tags ?? [])],
-    revalidate: config?.revalidate,
-  })
+  try {
+    const members = await fetchApi<TeamMemberPayload[]>(`/team`, {
+      tags: ["team", ...(config?.tags ?? [])],
+      revalidate: config?.revalidate,
+    })
 
-  return members.sort((a, b) => {
-    const orderA = a.displayOrder ?? Number.MAX_SAFE_INTEGER
-    const orderB = b.displayOrder ?? Number.MAX_SAFE_INTEGER
-    return orderA - orderB
-  })
+    return members.sort((a, b) => {
+      const orderA = a.displayOrder ?? Number.MAX_SAFE_INTEGER
+      const orderB = b.displayOrder ?? Number.MAX_SAFE_INTEGER
+      return orderA - orderB
+    })
+  } catch (error) {
+    logFetchError("team members", error)
+    return []
+  }
 }
 
 export async function getGalleryItems(config?: FetchConfig) {
-  const items = await fetchApi<GalleryItemPayload[]>(`/gallery`, {
-    tags: ["gallery", ...(config?.tags ?? [])],
-    revalidate: config?.revalidate,
-  })
+  try {
+    const items = await fetchApi<GalleryItemPayload[]>(`/gallery`, {
+      tags: ["gallery", ...(config?.tags ?? [])],
+      revalidate: config?.revalidate,
+    })
 
-  return items.sort((a, b) => {
-    const orderA = a.displayOrder ?? Number.MAX_SAFE_INTEGER
-    const orderB = b.displayOrder ?? Number.MAX_SAFE_INTEGER
-    return orderA - orderB
-  })
+    return items.sort((a, b) => {
+      const orderA = a.displayOrder ?? Number.MAX_SAFE_INTEGER
+      const orderB = b.displayOrder ?? Number.MAX_SAFE_INTEGER
+      return orderA - orderB
+    })
+  } catch (error) {
+    logFetchError("gallery items", error)
+    return []
+  }
 }
 
 export async function getSettings(config?: FetchConfig) {
-  return fetchApi<SettingPayload[]>(`/settings`, {
-    tags: ["settings", ...(config?.tags ?? [])],
-    revalidate: config?.revalidate,
-  })
+  try {
+    return await fetchApi<SettingPayload[]>(`/settings`, {
+      tags: ["settings", ...(config?.tags ?? [])],
+      revalidate: config?.revalidate,
+    })
+  } catch (error) {
+    logFetchError("settings", error)
+    return []
+  }
 }
 
 export type ContactConfig = {
