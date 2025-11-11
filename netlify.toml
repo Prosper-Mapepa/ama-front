@@ -3,7 +3,7 @@ command = "pnpm install --frozen-lockfile && pnpm run build"
 publish = ".next"
 
 [build.environment]
-NODE_VERSION = "18"
+NODE_VERSION = "20.10.0"
 PNPM_HOME = "/opt/buildhome/.pnpm"
 NPM_FLAGS = "--version"
 
