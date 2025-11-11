@@ -1,0 +1,14 @@
+[build]
+command = "pnpm install --frozen-lockfile && pnpm run build"
+publish = ".next"
+
+[build.environment]
+NODE_VERSION = "18"
+PNPM_HOME = "/opt/buildhome/.pnpm"
+NPM_FLAGS = "--version"
+
+[functions]
+node_bundler = "esbuild"
+
+[[plugins]]
+package = "@netlify/plugin-nextjs"
