@@ -7,6 +7,7 @@ import type {
   SettingPayload,
   TeamMemberPayload,
 } from "@/lib/api"
+import { resolveMediaUrl } from "@/lib/utils"
 
 const DEFAULT_API_BASE = "http://localhost:4000/api"
 const API_BASE =
@@ -62,12 +63,41 @@ async function fetchApi<T>(path: string, config: FetchConfig = {}): Promise<T> {
   return response.json() as Promise<T>
 }
 
+function normalizeSection(section: PageSectionPayload): PageSectionPayload {
+  return {
+    ...section,
+    imageUrl: resolveMediaUrl(section.imageUrl) ?? section.imageUrl ?? undefined,
+  }
+}
+
+function normalizeEvent(event: EventPayload): EventPayload {
+  return {
+    ...event,
+    imageUrl: resolveMediaUrl(event.imageUrl) ?? event.imageUrl ?? undefined,
+  }
+}
+
+function normalizeTeamMember(member: TeamMemberPayload): TeamMemberPayload {
+  return {
+    ...member,
+    imageUrl: resolveMediaUrl(member.imageUrl) ?? member.imageUrl ?? undefined,
+  }
+}
+
+function normalizeGalleryItem(item: GalleryItemPayload): GalleryItemPayload {
+  return {
+    ...item,
+    url: resolveMediaUrl(item.url) ?? item.url,
+  }
+}
+
 export async function getPageSections(page: "home" | "about", config?: FetchConfig) {
   try {
-    return await fetchApi<PageSectionPayload[]>(`/page-sections?page=${page}`, {
+    const sections = await fetchApi<PageSectionPayload[]>(`/page-sections?page=${page}`, {
       tags: ["page-sections", page, ...(config?.tags ?? [])],
       revalidate: config?.revalidate,
     })
+    return sections.map(normalizeSection)
   } catch (error) {
     logFetchError(`page sections for "${page}"`, error)
     return []
@@ -83,7 +113,7 @@ export async function getEvents(config?: FetchConfig) {
 
     return events
       .map((event) => ({
-        ...event,
+        ...normalizeEvent(event),
         date: event.date,
       }))
       .sort((a, b) => {
@@ -104,7 +134,7 @@ export async function getTeamMembers(config?: FetchConfig) {
       revalidate: config?.revalidate,
     })
 
-    return members.sort((a, b) => {
+    return members.map(normalizeTeamMember).sort((a, b) => {
       const orderA = a.displayOrder ?? Number.MAX_SAFE_INTEGER
       const orderB = b.displayOrder ?? Number.MAX_SAFE_INTEGER
       return orderA - orderB
@@ -122,7 +152,7 @@ export async function getGalleryItems(config?: FetchConfig) {
       revalidate: config?.revalidate,
     })
 
-    return items.sort((a, b) => {
+    return items.map(normalizeGalleryItem).sort((a, b) => {
       const orderA = a.displayOrder ?? Number.MAX_SAFE_INTEGER
       const orderB = b.displayOrder ?? Number.MAX_SAFE_INTEGER
       return orderA - orderB
@@ -277,7 +307,7 @@ export async function getSiteConfig(config?: FetchConfig): Promise<SiteConfig> {
         bio: coerceString(advisorValue.bio),
         email: coerceString(advisorValue.email),
         office: coerceString(advisorValue.office),
-        imageUrl: coerceString(advisorValue.imageUrl),
+        imageUrl: resolveMediaUrl(coerceString(advisorValue.imageUrl)) ?? coerceString(advisorValue.imageUrl),
       }
     : undefined
 
