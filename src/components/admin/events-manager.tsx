@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Save, Plus, Trash2, Calendar, Clock, MapPin, Loader2 } from "lucide-react"
 import { adminApi, EventPayload } from "@/lib/api"
-import { cn } from "@/lib/utils"
+import { cn, resolveMediaUrl } from "@/lib/utils"
 import { toast } from "sonner"
 
 type ManagedEvent = EventPayload & {
@@ -60,10 +60,11 @@ export function EventsManager() {
         setEvents(
           data.map((event) => ({
             ...event,
+            imageUrl: resolveMediaUrl(event.imageUrl) ?? event.imageUrl ?? undefined,
             clientId: event.id ?? crypto.randomUUID(),
             isNew: false,
             pendingFile: null,
-            previewUrl: event.imageUrl ?? null,
+            previewUrl: resolveMediaUrl(event.imageUrl) ?? event.imageUrl ?? null,
           })),
         )
         setError(null)
@@ -135,7 +136,7 @@ export function EventsManager() {
           return {
             ...item,
             pendingFile: null,
-            previewUrl: item.imageUrl ?? null,
+            previewUrl: resolveMediaUrl(item.imageUrl) ?? item.imageUrl ?? null,
           }
         }
 
@@ -258,11 +259,12 @@ export function EventsManager() {
             ? {
                 ...item,
                 ...saved,
+                imageUrl: resolveMediaUrl(saved.imageUrl) ?? saved.imageUrl ?? undefined,
                 clientId: item.clientId,
                 isNew: false,
                 isSaving: false,
                 pendingFile: null,
-                previewUrl: saved.imageUrl ?? null,
+                previewUrl: resolveMediaUrl(saved.imageUrl) ?? saved.imageUrl ?? null,
               }
             : item,
         ),

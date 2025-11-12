@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Save, Plus, Trash2, Loader2 } from "lucide-react"
 import { adminApi, PageSectionPayload } from "@/lib/api"
-import { cn } from "@/lib/utils"
+import { cn, resolveMediaUrl } from "@/lib/utils"
 import { toast } from "sonner"
 
 type ManagedSection = PageSectionPayload & {
@@ -51,10 +51,11 @@ export function ContentEditor({ section }: ContentEditorProps) {
         setSections(
           data.map((item) => ({
             ...item,
+            imageUrl: resolveMediaUrl(item.imageUrl) ?? item.imageUrl ?? undefined,
             clientId: item.id ?? crypto.randomUUID(),
             isNew: false,
             pendingFile: null,
-            previewUrl: item.imageUrl ?? null,
+            previewUrl: resolveMediaUrl(item.imageUrl) ?? item.imageUrl ?? null,
           })),
         )
         setError(null)
@@ -245,11 +246,12 @@ export function ContentEditor({ section }: ContentEditorProps) {
               ? {
                   ...item,
                   ...updated,
+                  imageUrl: resolveMediaUrl(updated.imageUrl) ?? updated.imageUrl ?? undefined,
                   clientId: item.clientId,
                   isSaving: false,
                   isNew: false,
                   pendingFile: null,
-                  previewUrl: updated.imageUrl ?? null,
+                  previewUrl: resolveMediaUrl(updated.imageUrl) ?? updated.imageUrl ?? null,
                 }
               : item,
           ),
@@ -270,11 +272,12 @@ export function ContentEditor({ section }: ContentEditorProps) {
               ? {
                   ...item,
                   ...created,
+                  imageUrl: resolveMediaUrl(created.imageUrl) ?? created.imageUrl ?? undefined,
                   clientId: item.clientId,
                   isSaving: false,
                   isNew: false,
                   pendingFile: null,
-                  previewUrl: created.imageUrl ?? null,
+                  previewUrl: resolveMediaUrl(created.imageUrl) ?? created.imageUrl ?? null,
                 }
               : item,
           ),

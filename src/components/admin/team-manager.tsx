@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Save, Plus, Trash2, Mail, Linkedin, Loader2 } from "lucide-react"
 import { adminApi, TeamMemberPayload } from "@/lib/api"
-import { cn } from "@/lib/utils"
+import { cn, resolveMediaUrl } from "@/lib/utils"
 import { toast } from "sonner"
 
 type ManagedMember = TeamMemberPayload & {
@@ -58,13 +58,17 @@ export function TeamManager() {
       .then((data) => {
         if (!active) return
         setMembers(
-          data.map((member) => ({
-            ...member,
-            clientId: member.id ?? crypto.randomUUID(),
-            isNew: false,
-            pendingFile: null,
-            previewUrl: member.imageUrl ?? null,
-          })),
+          data.map((member) => {
+            const normalized = resolveMediaUrl(member.imageUrl) ?? member.imageUrl ?? undefined
+            return {
+              ...member,
+              imageUrl: normalized,
+              clientId: member.id ?? crypto.randomUUID(),
+              isNew: false,
+              pendingFile: null,
+              previewUrl: normalized ?? null,
+            }
+          }),
         )
         setError(null)
       })
@@ -257,11 +261,12 @@ export function TeamManager() {
             ? {
                 ...member,
                 ...saved,
+                imageUrl: resolveMediaUrl(saved.imageUrl) ?? saved.imageUrl ?? undefined,
                 clientId: member.clientId,
                 isSaving: false,
                 isNew: false,
                 pendingFile: null,
-                previewUrl: saved.imageUrl ?? null,
+                previewUrl: resolveMediaUrl(saved.imageUrl) ?? saved.imageUrl ?? null,
               }
             : member,
         ),

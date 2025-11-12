@@ -19,7 +19,7 @@ import {
 import type { EventPayload, GalleryItemPayload, PageSectionPayload, TeamMemberPayload } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
+import { cn, resolveMediaUrl } from "@/lib/utils"
 import { UpcomingEvents } from "@/components/events/upcoming-events"
 
 type HomePageClientProps = {
@@ -49,18 +49,6 @@ const DEFAULT_HERO = {
 
 const DEFAULT_MISSION =
   "To empower students to become innovative, industry-ready marketing leaders."
-
-const API_ORIGIN =
-  (process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000/api").replace(/\/api$/, "")
-
-const resolveMediaUrl = (url?: string | null): string | undefined => {
-  if (!url) return undefined
-  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) {
-    return url
-  }
-  const normalized = url.startsWith("/") ? url : `/${url}`
-  return `${API_ORIGIN}${normalized}`
-}
 
 const DEFAULT_TEAM: TeamMemberPayload[] = [
   {
@@ -559,7 +547,7 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
         src: resolvedSrc,
         alt: item.title,
         caption: item.caption ?? item.title,
-        isLocal: resolvedSrc.startsWith(API_ORIGIN),
+        isLocal: !!item.url && !/^https?:/i.test(item.url),
       }
     })
   }, [galleryItems])

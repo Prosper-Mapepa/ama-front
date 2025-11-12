@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { resolveMediaUrl } from "@/lib/utils"
 type UpcomingEventsProps = {
   events: EventPayload[]
 }
@@ -219,7 +220,7 @@ export function UpcomingEvents({ events }: UpcomingEventsProps) {
     <div className="grid gap-6 lg:grid-cols-2">
       {sortedEvents.map((event) => {
         const eventId = event.id ?? event.title
-        const resolvedImage = event.imageUrl
+        const resolvedImage = resolveMediaUrl(event.imageUrl) ?? event.imageUrl ?? undefined
         const isActive = activeEventId === eventId
         const isSuccess = successEventId === eventId
         const totalRsvps = getRsvpTotal(event.id)

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { getEvents, getSiteConfig } from "@/lib/server-api"
 import { UpcomingEvents } from "@/components/events/upcoming-events"
+import { resolveMediaUrl } from "@/lib/utils"
 
 function formatDate(dateString: string | undefined) {
   if (!dateString) return "TBA"
@@ -20,17 +21,6 @@ function formatDate(dateString: string | undefined) {
     day: "numeric",
     year: "numeric",
   })
-}
-
-const API_ORIGIN = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000/api").replace(/\/api$/, "")
-
-const resolveMediaUrl = (url?: string | null): string | undefined => {
-  if (!url) return undefined
-  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) {
-    return url
-  }
-  const normalized = url.startsWith("/") ? url : `/${url}`
-  return `${API_ORIGIN}${normalized}`
 }
 
 function splitEvents() {

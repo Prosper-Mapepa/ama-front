@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         port: "4000",
         pathname: "/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "ama-api-production.up.railway.app",
+        pathname: "/uploads/**",
+      },
     ],
   },
 };

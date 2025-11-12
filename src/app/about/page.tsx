@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { getPageSections, getTeamMembers, getSiteConfig } from "@/lib/server-api"
+import { resolveMediaUrl } from "@/lib/utils"
 import Jeffrey from "../../../assets/jeffrey.jpg"
 
 const DEFAULT_HERO = {
@@ -87,7 +88,7 @@ export default async function AboutPage() {
                       {section.imageUrl ? (
                         <div className="relative aspect-[4/3] overflow-hidden bg-muted">
                           <Image
-                            src={section.imageUrl}
+                            src={resolveMediaUrl(section.imageUrl) ?? section.imageUrl}
                             alt={section.title || section.heading}
                             fill
                             className="object-cover transition-transform duration-500 hover:scale-110"
@@ -143,7 +144,7 @@ export default async function AboutPage() {
                   >
                     <div className="relative aspect-[4/5] overflow-hidden bg-muted">
                       <Image
-                        src={member.imageUrl || "/placeholder.svg"}
+                        src={resolveMediaUrl(member.imageUrl) ?? member.imageUrl ?? "/placeholder.svg"}
                         alt={member.name}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
