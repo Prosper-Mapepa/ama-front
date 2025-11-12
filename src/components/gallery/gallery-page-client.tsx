@@ -5,7 +5,7 @@ import Image from "next/image"
 import { X } from "lucide-react"
 
 import type { GalleryItemPayload } from "@/lib/api"
-import { cn } from "@/lib/utils"
+import { cn, resolveMediaUrl } from "@/lib/utils"
 
 type GalleryPageClientProps = {
   images: GalleryItemPayload[]
@@ -78,7 +78,7 @@ export function GalleryPageClient({ images }: GalleryPageClientProps) {
                   }}
                 >
                   <Image
-                    src={image.url || "/placeholder.svg"}
+                    src={resolveMediaUrl(image.url) ?? image.url ?? "/placeholder.svg"}
                     alt={image.title}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -115,7 +115,7 @@ export function GalleryPageClient({ images }: GalleryPageClientProps) {
           </button>
           <div className="relative max-h-[90vh] max-w-6xl" onClick={(event) => event.stopPropagation()}>
             <Image
-              src={activeImage.url || "/placeholder.svg"}
+              src={resolveMediaUrl(activeImage.url) ?? activeImage.url ?? "/placeholder.svg"}
               alt={activeImage.title}
               width={1200}
               height={800}

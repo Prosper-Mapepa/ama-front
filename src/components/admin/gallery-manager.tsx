@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Save, Plus, Trash2, Loader2 } from "lucide-react"
 import { adminApi, GalleryItemPayload } from "@/lib/api"
-import { cn } from "@/lib/utils"
+import { cn, resolveMediaUrl } from "@/lib/utils"
 import { toast } from "sonner"
 
 type ManagedImage = GalleryItemPayload & {
@@ -58,13 +58,17 @@ export function GalleryManager() {
       .then((data) => {
         if (!mounted) return
         setImages(
-          data.map((image) => ({
-            ...image,
-            clientId: image.id ?? crypto.randomUUID(),
-            isNew: false,
-            pendingFile: null,
-            previewUrl: image.url ?? null,
-          })),
+          data.map((image) => {
+            const normalized = resolveMediaUrl(image.url) ?? image.url ?? undefined
+            return {
+              ...image,
+              url: normalized ?? "",
+              clientId: image.id ?? crypto.randomUUID(),
+              isNew: false,
+              pendingFile: null,
+              previewUrl: normalized ?? null,
+            }
+          }),
         )
         setError(null)
       })
@@ -139,10 +143,11 @@ export function GalleryManager() {
           revokePreview(image.previewUrl)
         }
         if (!file) {
+          const normalized = resolveMediaUrl(image.url) ?? image.url ?? null
           return {
             ...image,
             pendingFile: null,
-            previewUrl: image.url ?? null,
+            previewUrl: normalized,
           }
         }
         const previewUrl = URL.createObjectURL(file)
@@ -229,7 +234,8 @@ export function GalleryManager() {
         !imageRecord.pendingFile &&
         (imageRecord.previewUrl === null || imageRecord.previewUrl === undefined) &&
         !imageRecord.url
-      const urlValue = uploadedUrl ?? (shouldClearImage ? null : imageRecord.url ?? null)
+      const normalizedExisting = resolveMediaUrl(imageRecord.url) ?? imageRecord.url ?? null
+      const urlValue = uploadedUrl ?? (shouldClearImage ? null : normalizedExisting)
 
       if (!urlValue) {
         throw new Error("Please upload an image before saving.")
@@ -264,11 +270,12 @@ export function GalleryManager() {
             ? {
                 ...image,
                 ...saved,
+                url: resolveMediaUrl(saved.url) ?? saved.url ?? "",
                 clientId: image.clientId,
-                isSaving: false,
                 isNew: false,
+                isSaving: false,
                 pendingFile: null,
-                previewUrl: saved.url ?? null,
+                previewUrl: resolveMediaUrl(saved.url) ?? saved.url ?? null,
               }
             : image,
         ),
