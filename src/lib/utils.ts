@@ -20,24 +20,59 @@ const ASSET_ORIGIN = (() => {
 
 const LOCALHOST_REGEX = /^https?:\/\/localhost(?::\d+)?/
 
+function collapseUploadSegments(value: string): string {
+  return value.replace(/\/uploads\/(?:uploads\/)+/g, "/uploads/")
+}
+
+function ensureLeadingSlash(path: string): string {
+  if (path.startsWith("/")) return path
+  return `/${path}`
+}
+
 export function resolveMediaUrl(url?: string | null): string | undefined {
   if (!url) return undefined
 
-  const normalized = url.trim()
+  const normalized = collapseUploadSegments(url.trim())
   if (normalized === "") return undefined
 
   if (normalized.startsWith("http")) {
     if (LOCALHOST_REGEX.test(normalized) && ASSET_ORIGIN) {
-      return normalized.replace(LOCALHOST_REGEX, ASSET_ORIGIN)
+      return collapseUploadSegments(normalized.replace(LOCALHOST_REGEX, ASSET_ORIGIN))
     }
     return normalized
   }
 
-  if (!ASSET_ORIGIN) return normalized
+  if (!ASSET_ORIGIN) return collapseUploadSegments(normalized)
 
-  if (normalized.startsWith("/")) {
-    return `${ASSET_ORIGIN}${normalized}`
+  const relative = normalized.startsWith("/") ? normalized : `/${normalized}`
+  return collapseUploadSegments(`${ASSET_ORIGIN}${relative}`)
+}
+
+export function mediaPathForApi(url?: string | null): string | null {
+  if (url == null) return null
+  const trimmed = collapseUploadSegments(url.trim())
+  if (trimmed === "") return null
+
+  try {
+    const parsed = new URL(trimmed)
+    if (ASSET_ORIGIN && parsed.origin === ASSET_ORIGIN) {
+      return collapseUploadSegments(ensureLeadingSlash(parsed.pathname))
+    }
+    if (LOCALHOST_REGEX.test(trimmed)) {
+      return collapseUploadSegments(ensureLeadingSlash(parsed.pathname))
+    }
+  } catch {
+    // not an absolute URL, fall through
   }
 
-  return `${ASSET_ORIGIN}/${normalized}`
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    try {
+      const parsed = new URL(trimmed)
+      return collapseUploadSegments(ensureLeadingSlash(parsed.pathname))
+    } catch {
+      // ignore parse errors and fall through
+    }
+  }
+
+  return collapseUploadSegments(ensureLeadingSlash(trimmed))
 }

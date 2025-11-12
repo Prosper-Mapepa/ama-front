@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Save, Plus, Trash2, Calendar, Clock, MapPin, Loader2 } from "lucide-react"
 import { adminApi, EventPayload } from "@/lib/api"
-import { cn, resolveMediaUrl } from "@/lib/utils"
+import { cn, resolveMediaUrl, mediaPathForApi } from "@/lib/utils"
 import { toast } from "sonner"
 
 type ManagedEvent = EventPayload & {
@@ -222,7 +222,9 @@ export function EventsManager() {
         !eventRecord.pendingFile &&
         (eventRecord.previewUrl === null || eventRecord.previewUrl === undefined) &&
         !eventRecord.imageUrl
-      const imageUrlValue = uploadedUrl ?? (shouldClearImage ? null : eventRecord.imageUrl ?? null)
+      const existingResolved = resolveMediaUrl(eventRecord.imageUrl) ?? eventRecord.imageUrl ?? null
+      const imageUrlValue = uploadedUrl ?? (shouldClearImage ? null : existingResolved)
+      const imageUrlForApi = mediaPathForApi(imageUrlValue)
 
       if (eventRecord.pendingFile && eventRecord.previewUrl) {
         revokePreview(eventRecord.previewUrl)
@@ -238,7 +240,7 @@ export function EventsManager() {
           description: eventRecord.description,
           category: eventRecord.category,
           spots: eventRecord.spots,
-          imageUrl: imageUrlValue,
+          imageUrl: imageUrlForApi,
         })
       } else {
         saved = await adminApi.createEvent({
@@ -249,7 +251,7 @@ export function EventsManager() {
           description: eventRecord.description,
           category: eventRecord.category,
           spots: eventRecord.spots,
-          imageUrl: imageUrlValue,
+          imageUrl: imageUrlForApi,
         })
       }
 

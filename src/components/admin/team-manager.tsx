@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Save, Plus, Trash2, Mail, Linkedin, Loader2 } from "lucide-react"
 import { adminApi, TeamMemberPayload } from "@/lib/api"
-import { cn, resolveMediaUrl } from "@/lib/utils"
+import { cn, resolveMediaUrl, mediaPathForApi } from "@/lib/utils"
 import { toast } from "sonner"
 
 type ManagedMember = TeamMemberPayload & {
@@ -224,7 +224,9 @@ export function TeamManager() {
         !memberRecord.pendingFile &&
         (memberRecord.previewUrl === null || memberRecord.previewUrl === undefined) &&
         !memberRecord.imageUrl
-      const imageUrlValue = uploadedUrl ?? (shouldClearImage ? null : memberRecord.imageUrl ?? null)
+      const existingResolved = resolveMediaUrl(memberRecord.imageUrl) ?? memberRecord.imageUrl ?? null
+      const imageUrlValue = uploadedUrl ?? (shouldClearImage ? null : existingResolved)
+      const imageUrlForApi = mediaPathForApi(imageUrlValue)
 
       if (memberRecord.pendingFile && memberRecord.previewUrl) {
         revokePreview(memberRecord.previewUrl)
@@ -239,7 +241,7 @@ export function TeamManager() {
           bio: memberRecord.bio,
           email: memberRecord.email,
           linkedin: memberRecord.linkedin,
-          imageUrl: imageUrlValue,
+          imageUrl: imageUrlForApi,
           displayOrder: memberRecord.displayOrder,
         })
       } else {
@@ -250,7 +252,7 @@ export function TeamManager() {
           bio: memberRecord.bio,
           email: memberRecord.email,
           linkedin: memberRecord.linkedin,
-          imageUrl: imageUrlValue,
+          imageUrl: imageUrlForApi,
           displayOrder: memberRecord.displayOrder ?? members.length,
         })
       }

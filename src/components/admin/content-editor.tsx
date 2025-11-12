@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Save, Plus, Trash2, Loader2 } from "lucide-react"
 import { adminApi, PageSectionPayload } from "@/lib/api"
-import { cn, resolveMediaUrl } from "@/lib/utils"
+import { cn, resolveMediaUrl, mediaPathForApi } from "@/lib/utils"
 import { toast } from "sonner"
 
 type ManagedSection = PageSectionPayload & {
@@ -226,7 +226,9 @@ export function ContentEditor({ section }: ContentEditorProps) {
 
       const shouldClearImage =
         !sectionData.pendingFile && (sectionData.previewUrl === null || sectionData.previewUrl === undefined) && !sectionData.imageUrl
-      const imageUrlValue = uploadedUrl ?? (shouldClearImage ? null : sectionData.imageUrl ?? null)
+      const existingResolved = resolveMediaUrl(sectionData.imageUrl) ?? sectionData.imageUrl ?? null
+      const imageUrlValue = uploadedUrl ?? (shouldClearImage ? null : existingResolved)
+      const imageUrlForApi = mediaPathForApi(imageUrlValue)
 
       if (sectionData.pendingFile && sectionData.previewUrl) {
         revokePreview(sectionData.previewUrl)
@@ -237,7 +239,7 @@ export function ContentEditor({ section }: ContentEditorProps) {
           title: sectionData.title,
           heading: sectionData.heading,
           description: sectionData.description,
-          imageUrl: imageUrlValue,
+          imageUrl: imageUrlForApi,
           displayOrder: sectionData.displayOrder,
         })
         setSections((prev) =>
@@ -263,7 +265,7 @@ export function ContentEditor({ section }: ContentEditorProps) {
           title: sectionData.title,
           heading: sectionData.heading,
           description: sectionData.description,
-          imageUrl: imageUrlValue,
+          imageUrl: imageUrlForApi,
           displayOrder: sectionData.displayOrder ?? sections.length,
         })
         setSections((prev) =>

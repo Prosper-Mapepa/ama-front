@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Save, Plus, Trash2, Loader2 } from "lucide-react"
 import { adminApi, GalleryItemPayload } from "@/lib/api"
-import { cn, resolveMediaUrl } from "@/lib/utils"
+import { cn, resolveMediaUrl, mediaPathForApi } from "@/lib/utils"
 import { toast } from "sonner"
 
 type ManagedImage = GalleryItemPayload & {
@@ -236,9 +236,14 @@ export function GalleryManager() {
         !imageRecord.url
       const normalizedExisting = resolveMediaUrl(imageRecord.url) ?? imageRecord.url ?? null
       const urlValue = uploadedUrl ?? (shouldClearImage ? null : normalizedExisting)
+      const urlForApi = mediaPathForApi(urlValue)
 
       if (!urlValue) {
         throw new Error("Please upload an image before saving.")
+      }
+
+      if (!urlForApi) {
+        throw new Error("Unable to resolve uploaded image URL.")
       }
 
       if (imageRecord.pendingFile && imageRecord.previewUrl) {
@@ -248,7 +253,7 @@ export function GalleryManager() {
       let saved: GalleryItemPayload
       if (imageRecord.id) {
         saved = await adminApi.updateGalleryItem(imageRecord.id, {
-          url: urlValue,
+          url: urlForApi,
           title: imageRecord.title,
           category: imageRecord.category,
           caption: imageRecord.caption,
@@ -256,7 +261,7 @@ export function GalleryManager() {
         })
       } else {
         saved = await adminApi.createGalleryItem({
-          url: urlValue,
+          url: urlForApi,
           title: imageRecord.title,
           category: imageRecord.category,
           caption: imageRecord.caption,
