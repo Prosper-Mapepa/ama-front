@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "ama-api-production.up.railway.app",
+        hostname: "ama-api-live.up.railway.app",
         pathname: "/uploads/**",
       },
     ],
