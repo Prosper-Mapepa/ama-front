@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import type React from "react"
-import { Clock, Mail, MapPin, Send } from "lucide-react"
+import { CheckCircle2, Clock, Mail, MapPin, Send } from "lucide-react"
 
 import type { ContactConfig, SocialConfig } from "@/lib/server-api"
 import { Card, CardContent } from "@/components/ui/card"
@@ -23,12 +23,19 @@ export function ContactPageClient({ contact, socials }: ContactPageClientProps) 
     subject: "",
     message: "",
   })
+  const [statusMessage, setStatusMessage] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!statusMessage) return
+    const timeout = window.setTimeout(() => setStatusMessage(null), 6000)
+    return () => window.clearTimeout(timeout)
+  }, [statusMessage])
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
     // TODO: Replace with backend integration (email service or API endpoint)
     console.log("Contact form submission:", formData)
-    alert("Thank you for your message! We'll get back to you soon.")
+    setStatusMessage("Thank you! Your message is on its way to the AMA CMU leadership team.")
     setFormData({ name: "", email: "", subject: "", message: "" })
   }
 
@@ -40,7 +47,7 @@ export function ContactPageClient({ contact, socials }: ContactPageClientProps) 
   const socialButtons = [
     { label: "Instagram", href: socials.instagram },
     { label: "LinkedIn", href: socials.linkedin },
-    { label: "Facebook", href: socials.facebook },
+    // { label: "Facebook", href: socials.facebook },
     { label: "Website", href: socials.website },
   ].filter((item) => Boolean(item.href))
 
@@ -146,6 +153,16 @@ export function ContactPageClient({ contact, socials }: ContactPageClientProps) 
             <Card>
               <CardContent className="pt-6">
                 <h2 className="mb-6 text-2xl font-bold text-foreground">Send Us a Message</h2>
+
+                {statusMessage ? (
+                  <div className="mb-6 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 shadow-[0_18px_35px_-30px_rgba(16,185,129,0.55)]">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0" />
+                    <div>
+                      <p className="font-semibold">Message received!</p>
+                      <p className="text-emerald-800/80">{statusMessage}</p>
+                    </div>
+                  </div>
+                ) : null}
 
                 <form onSubmit={handleSubmit} className="space-y-6 ">
                   <div className="space-y-2">

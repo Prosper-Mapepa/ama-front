@@ -55,8 +55,18 @@ export function Navigation() {
                 className="h-full w-auto object-contain rounded-lg"
               />
             </div>
-            <div className="hidden font-bold uppercase tracking-[0.28em] text-muted-foreground transition-colors duration-300 group-hover:text-foreground sm:block">
-              CMU Chapter
+            <div className="min-w-0 text-left text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
+              <span className="block text-[0.72rem] font-semibold uppercase tracking-[0.28em] leading-tight sm:hidden">
+                Central Michigan University
+              </span>
+              <div className="hidden sm:flex sm:flex-col sm:leading-tight">
+                <span className="text-[0.72rem] font-semibold uppercase tracking-[0.25em] lg:text-xs lg:tracking-[0.3em]">
+                  Central Michigan
+                </span>
+                <span className="mt-0.5 text-[0.72rem] font-semibold uppercase tracking-[0.25em] lg:text-xs lg:tracking-[0.3em]">
+                  University
+                </span>
+              </div>
             </div>
           </Link>
 

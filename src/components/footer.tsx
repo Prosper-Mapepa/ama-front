@@ -28,12 +28,12 @@ export function Footer({
   socials,
 }: FooterProps) {
   const socialLinks = [
-    {
-      key: "email",
-      href: contactEmail ? `mailto:${contactEmail}` : undefined,
-      icon: Mail,
-      label: "Email",
-    },
+    // {
+    //   key: "email",
+    //   href: contactEmail ? `mailto:${contactEmail}` : undefined,
+    //   icon: Mail,
+    //   label: "Email",
+    // },
     {
       key: "linkedin",
       href: socials?.linkedin,
@@ -46,24 +46,24 @@ export function Footer({
       icon: Instagram,
       label: "Instagram",
     },
-    {
-      key: "facebook",
-      href: socials?.facebook,
-      icon: Facebook,
-      label: "Facebook",
-    },
-    {
-      key: "twitter",
-      href: socials?.twitter,
-      icon: Twitter,
-      label: "Twitter / X",
-    },
-    {
-      key: "youtube",
-      href: socials?.youtube,
-      icon: Youtube,
-      label: "YouTube",
-    },
+    // {
+    //   key: "facebook",
+    //   href: socials?.facebook,
+    //   icon: Facebook,
+    //   label: "Facebook",
+    // },
+    // {
+    //   key: "twitter",
+    //   href: socials?.twitter,
+    //   icon: Twitter,
+    //   label: "Twitter / X",
+    // },
+    // {
+    //   key: "youtube",
+    //   href: socials?.youtube,
+    //   icon: Youtube,
+    //   label: "YouTube",
+    // },
   ].filter((link) => Boolean(link.href))
 
   return (
@@ -73,9 +73,9 @@ export function Footer({
           {/* About */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">AMA at CMU</h3>
-            <p className="text-sm leading-relaxed text-muted-foreground">{aboutSummary}</p>
+            <p className="text-base leading-relaxed text-muted-foreground">{aboutSummary}</p>
             {locationLines?.length ? (
-              <div className="text-xs text-muted-foreground">
+              <div className="text-sm text-primary">
                 {locationLines.map((line) => (
                   <div key={line}>{line}</div>
                 ))}
@@ -86,7 +86,7 @@ export function Footer({
           {/* Quick Links */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">Quick Links</h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-base">
               <li>
                 <Link href="/about" className="text-muted-foreground transition-colors hover:text-foreground">
                   About Us
@@ -118,7 +118,7 @@ export function Footer({
           {/* Resources */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-foreground">Resources</h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-base">
               <li>
                 <a
                   href="https://www.ama.org"
@@ -150,7 +150,7 @@ export function Footer({
                 href={socials.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block text-sm text-muted-foreground transition-colors hover:text-foreground"
+                className="inline-block text-base text-primary transition-colors hover:text-foreground"
               >
                 Visit our website
               </a>
@@ -174,7 +174,7 @@ export function Footer({
                 </a>
               ))}
             </div>
-            {contactEmail ? <p className="text-sm text-muted-foreground">{contactEmail}</p> : null}
+            {/* {contactEmail ? <p className="text-base text-muted-foreground">{contactEmail}</p> : null} */}
           </div>
         </div>
 

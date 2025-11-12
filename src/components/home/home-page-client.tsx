@@ -8,10 +8,11 @@ import {
   Award,
   Briefcase,
   Calendar,
+  Handshake,
   Lightbulb,
   Linkedin,
   Mail,
-  Sparkles,
+  Megaphone,
   TrendingUp,
   Users,
 } from "lucide-react"
@@ -21,6 +22,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn, resolveMediaUrl } from "@/lib/utils"
 import { UpcomingEvents } from "@/components/events/upcoming-events"
+import cmuLogo from "../../../assets/cmulogo.png"
+import amaLogo from "../../../assets/logo.png"
 
 type HomePageClientProps = {
   sections: PageSectionPayload[]
@@ -615,7 +618,7 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
   return (
     <main className="flex-1">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-background px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <section className="relative overflow-hidden bg-background px-4 py-12 sm:px-6 lg:px-8 lg:py-12">
         <div className="absolute inset-0">
           <div
             className="absolute inset-0"
@@ -630,7 +633,7 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(124,22,48,0.45),transparent_55%),radial-gradient(circle_at_80%_30%,rgba(124,22,48,0.3),transparent_60%)] mix-blend-overlay opacity-80" />
         </div>
 
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="pointer-events-none absolute -left-32 top-[-15%] h-[420px] w-[420px] rounded-full bg-accent/25 blur-[140px] opacity-70 animate-[pulse_10s_ease-in-out_infinite]" />
           <div className="pointer-events-none absolute right-[-18%] top-[20%] h-[500px] w-[500px] rounded-full bg-primary/20 blur-[180px] opacity-60 animate-[pulse_14s_ease-in-out_infinite]" />
         </div>
@@ -643,9 +646,8 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
                 isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0",
               )}
             >
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/45 bg-primary/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-primary-foreground/70 shadow-lg shadow-primary/10 backdrop-blur">
-                <Sparkles className="h-3.5 w-3.5" />
-                {hero.title}
+              <div className="inline-flex items-center justify-center">
+                <Image src={cmuLogo} alt="Central Michigan University" className="h-20 w-auto sm:h-24" priority />
               </div>
 
               <h1
@@ -704,7 +706,7 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
               >
                 <Button
                   size="lg"
-                  className="group w-full gap-2 rounded-full bg-[var(--color-cmu-gold)] px-7 py-3 text-base font-semibold text-black shadow-[0_20px_40px_-25px_rgba(0,0,0,0.6)] transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_30px_55px_-30px_rgba(0,0,0,0.65)] sm:w-auto"
+                  className="group w-full gap-2 rounded-lg bg-[var(--color-cmu-gold)] px-7 py-3 text-base font-semibold text-black shadow-[0_20px_40px_-25px_rgba(0,0,0,0.6)] transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_30px_55px_-30px_rgba(0,0,0,0.65)] sm:w-auto"
                   asChild
                 >
                   <Link href="/membership">
@@ -736,6 +738,69 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
         </div>
       </section>
 
+      {/* Sponsor CTA Section */}
+      <section className="border-b border-border bg-gradient-to-br from-background via-muted/40 to-background px-4 py-14 sm:px-6 lg:px-8">
+        <div className="container mx-auto">
+          <div className="rounded-3xl border border-primary/20 bg-primary/5 p-8 shadow-[0_30px_60px_-45px_rgba(124,22,48,0.65)] backdrop-blur-md">
+            <div className="grid gap-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-10">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-primary/80">
+                  Sponsors
+                </div>
+                <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                  Celebrate our partners & grow new sponsorships
+                </h2>
+                <p className="text-base leading-relaxed text-foreground/75 sm:text-base">
+                  We spotlight the brands that invest in CMU AMA and cultivate new relationships that fuel student innovation. Select an option below to recognize current supporters or start a new partnership conversation.
+                </p>
+                <div className="flex items-center gap-4 rounded-2xl border border-primary/20 bg-white/75 p-4 shadow-[0_18px_40px_-32px_rgba(0,0,0,0.5)]">
+                  <Image src={amaLogo} alt="American Marketing Association" className="h-10 w-auto sm:h-12" priority />
+                  <div className="text-sm text-foreground/75 sm:text-base">
+                    Official collegiate chapter of the
+                    <Link
+                      href="https://www.ama.org"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-1 font-semibold text-primary underline-offset-4 transition-colors duration-200 hover:text-primary/80 hover:underline"
+                    >
+                      American Marketing Association (ama.org)
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="group flex flex-col gap-3 rounded-2xl border border-transparent bg-white/80 p-5 shadow-[0_18px_35px_-28px_rgba(0,0,0,0.55)] transition-all duration-300 hover:border-primary/40 hover:shadow-[0_28px_60px_-35px_rgba(124,22,48,0.45)]">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Handshake className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground">Sponsor Recognition</h3>
+                  <p className="text-base leading-relaxed text-foreground/70">
+                    Submit logos, brand assets, or impact stories so we can highlight your organization across our channels and events.
+                  </p>
+                  <Button asChild variant="outline" className="mt-auto border-primary/40 text-primary hover:bg-primary/10">
+                    <Link href="/contact?sponsor=recognition#form">Share Materials</Link>
+                  </Button>
+                </div>
+
+                <div className="group flex flex-col gap-3 rounded-2xl border border-transparent bg-white/80 p-5 shadow-[0_18px_35px_-28px_rgba(0,0,0,0.55)] transition-all duration-300 hover:border-primary/40 hover:shadow-[0_28px_60px_-35px_rgba(124,22,48,0.45)]">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--color-cmu-gold)]/20 text-[var(--color-cmu-gold)]">
+                    <Megaphone className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground">Sponsorship Acquisition</h3>
+                  <p className="text-base leading-relaxed text-foreground/70">
+                    Explore tailored sponsorship bundles, on-campus activations, and custom collaborations with our executive board.
+                  </p>
+                  <Button asChild className="mt-auto bg-[var(--color-cmu-gold)] text-black hover:bg-[var(--color-cmu-gold)]/90">
+                    <Link href="/contact?sponsor=partnership#form">Schedule a Call</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
       <section className="border-b border-border bg-gradient-to-br from-muted/50 to-muted/30 px-4 py-12 sm:px-6 lg:px-8">
         <div className="container mx-auto">
@@ -749,7 +814,7 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
                 <div className="mb-2 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-4xl font-bold text-transparent transition-transform duration-300 group-hover:scale-110">
                   {stat.value}
                 </div>
-                <div className="text-sm font-medium text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
+                <div className="text-base font-medium text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
                   {stat.label}
                 </div>
               </div>
@@ -847,7 +912,7 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
                       {member.major ? <p className="text-sm text-foreground/80 font-medium">{member.major}</p> : null}
                     </div>
                     {summarizeBio(member.bio) || getRoleSummary(member.role) ? (
-                      <p className="text-sm leading-relaxed text-foreground/80 ">
+                      <p className="text-base leading-relaxed text-foreground/80 ">
                         {summarizeBio(member.bio) || getRoleSummary(member.role)}
                       </p>
                     ) : null}
@@ -968,7 +1033,7 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button
               size="lg"
-              className="group w-full bg-gradient-to-r from-accent to-accent/90 text-accent-foreground transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/50 sm:w-auto"
+              className="group text-base w-full bg-gradient-to-r from-accent to-accent/90 text-accent-foreground transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/50 sm:w-auto"
               asChild
             >
               <Link href="/membership">
@@ -980,7 +1045,7 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
               size="lg"
               variant="outline"
               asChild
-              className="group w-full border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-primary-foreground/50 hover:bg-primary-foreground/20 sm:w-auto"
+              className="group w-full text-base border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-primary-foreground/50 hover:bg-primary-foreground/20 sm:w-auto"
             >
               <Link href="/contact">
                 Contact Us

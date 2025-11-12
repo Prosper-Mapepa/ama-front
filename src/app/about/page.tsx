@@ -158,11 +158,11 @@ export default async function AboutPage() {
                           {member.role}
                         </div>
                         {member.major ? (
-                          <div className="mt-1 text-xs text-muted-foreground">{member.major}</div>
+                          <div className="mt-1 text-base text-muted-foreground">{member.major}</div>
                         ) : null}
                       </div>
                       {member.bio ? (
-                        <p className="text-sm leading-relaxed text-muted-foreground">{member.bio}</p>
+                        <p className="text-base leading-relaxed text-muted-foreground">{member.bio}</p>
                       ) : null}
 
                       <div className="flex gap-2">
