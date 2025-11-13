@@ -6,6 +6,7 @@ publish = ".next"
 NODE_VERSION = "20.10.0"
 PNPM_HOME = "/opt/buildhome/.pnpm"
 NPM_FLAGS = "--version"
+NEXT_PUBLIC_API_BASE_URL = "https://ama-appi.onrender.com/api"
 
 [functions]
 node_bundler = "esbuild"
