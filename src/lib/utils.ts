@@ -6,7 +6,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 const API_BASE = (process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000/api").trim()
-const ASSET_BASE = process.env.NEXT_PUBLIC_ASSET_BASE_URL?.trim()
+const ASSET_BASE =
+  process.env.NEXT_PUBLIC_ASSET_BASE_URL?.trim() ??
+  process.env.NEXT_PUBLIC_MEDIA_BASE_URL?.trim() ??
+  process.env.MEDIA_BASE_URL?.trim()
 
 const ASSET_ORIGIN = (() => {
   const base = ASSET_BASE || API_BASE

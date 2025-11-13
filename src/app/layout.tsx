@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "sonner"
 
+
 import "./globals.css"
 import { cn } from "@/lib/utils"
 
@@ -40,19 +41,27 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
+        url: "/favicon.jpg",
+        type: "image/jpeg",
+        rel: "icon",
+        sizes: "32x32",
       },
       {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
+        url: "/favicon.jpg",
+        type: "image/jpeg",
+        rel: "shortcut icon",
       },
     ],
-    apple: "/apple-icon.png",
+    shortcut: [
+      {
+        url: "/favicon.jpg",
+      },
+    ],
+    apple: [
+      {
+        url: "/favicon.jpg",
+      },
+    ],
   },
 }
 

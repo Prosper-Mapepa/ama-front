@@ -69,7 +69,8 @@ All content can be managed without touching code through the intuitive admin int
 7. In another terminal, run the frontend from the repo root: `pnpm dev`
 8. Visit [http://localhost:3000](http://localhost:3000)
 
-> Ensure `NEXT_PUBLIC_API_BASE_URL` points to your backend (`http://localhost:4000/api` during development).
+- Ensure `NEXT_PUBLIC_API_BASE_URL` points to your backend (`http://localhost:4000/api` during development).
+- Set `NEXT_PUBLIC_ASSET_BASE_URL` (or `MEDIA_BASE_URL`) to the origin that serves uploaded media, e.g. `http://localhost:4000/uploads`.
 
 ### Deployment
 
