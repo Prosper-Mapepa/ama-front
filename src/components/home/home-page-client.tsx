@@ -706,10 +706,10 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
               >
                 <Button
                   size="lg"
-                  className="group w-full gap-2 rounded-lg bg-[var(--color-cmu-gold)] px-7 py-3 text-base font-semibold text-black shadow-[0_20px_40px_-25px_rgba(0,0,0,0.6)] transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_30px_55px_-30px_rgba(0,0,0,0.65)] sm:w-auto"
+                  className="group w-full gap-2 rounded-lg bg-[var(--color-cmu-gold)] px-7 py-3 text-base font-semibold text-black shadow-[0_20px_40px_-25px_rgba(0,0,0,0.6)] transition-all duration-300 hover:translate-y-[-2px] hover:shadow-[0_30px_55px_-30px_rgba(0,0,0,0.65)] sm:w-auto hover:bg-[var(--color-cmu-gold)]/90"
                   asChild
                 >
-                  <Link href="/membership">
+                  <Link href="membership/register">
                     Join AMA
                     <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </Link>
@@ -718,7 +718,7 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
                   size="lg"
                   variant="outline"
                   asChild
-                  className="group w-full border-primary-foreground/40 bg-primary-foreground/10 text-primary-foreground backdrop-blur-md transition-all duration-300 hover:translate-y-[-2px] hover:border-primary-foreground/70 hover:bg-primary-foreground/20 sm:w-auto"
+                  className="group w-full border-primary-foreground/40 bg-primary-foreground/10 text-primary-foreground backdrop-blur-md transition-all duration-300 hover:translate-y-[-2px] hover:border-primary-foreground/70 hover:bg-primary-foreground/20 sm:w-auto hover:text-primary-foreground/80"
                 >
                   <Link href="/events">
                     Explore Upcoming Events

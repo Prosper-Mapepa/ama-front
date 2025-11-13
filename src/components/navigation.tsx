@@ -29,7 +29,7 @@ export function Navigation() {
     { href: "/gallery", label: "Gallery" },
     { href: "/membership", label: "FAQs" },
     { href: "/contact", label: "Contact" },
-    { href: "/admin", label: "Admin" }, // Added admin link to navigation
+    // { href: "/admin", label: "Admin" }, // Added admin link to navigation
   ]
 
   const isActive = (href: string) => pathname === href

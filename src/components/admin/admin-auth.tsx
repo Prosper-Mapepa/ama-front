@@ -61,7 +61,7 @@ export function AdminAuth({ onAuthenticated }: AdminAuthProps) {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@ama-cmu.org"
+                  placeholder=""
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value)
