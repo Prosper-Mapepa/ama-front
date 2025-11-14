@@ -222,11 +222,9 @@ export function TeamManager() {
 
     try {
       let uploadedUrl: string | undefined
-      let uploadedPath: string | undefined
       if (memberRecord.pendingFile) {
-        const { url, path } = await adminApi.uploadImage(memberRecord.pendingFile)
+        const { url } = await adminApi.uploadImage(memberRecord.pendingFile)
         uploadedUrl = url
-        uploadedPath = path
       }
 
       const shouldClearImage =
@@ -234,11 +232,11 @@ export function TeamManager() {
         (memberRecord.previewUrl === null || memberRecord.previewUrl === undefined) &&
         !memberRecord.imageUrl
       const existingResolved = resolveMediaUrl(memberRecord.imageUrl) ?? memberRecord.imageUrl ?? null
-      const imageUrlValue =
-        uploadedPath != null
-          ? `/uploads/${uploadedPath}`
-          : uploadedUrl ?? (shouldClearImage ? null : existingResolved)
-      const imageUrlForApi = mediaPathForApi(imageUrlValue)
+      const imageUrlValue = uploadedUrl ?? (shouldClearImage ? null : existingResolved)
+      const imageUrlForApi =
+        imageUrlValue && imageUrlValue.startsWith("http")
+          ? imageUrlValue
+          : mediaPathForApi(imageUrlValue ?? null)
 
       if (memberRecord.pendingFile && memberRecord.previewUrl) {
         revokePreview(memberRecord.previewUrl)
