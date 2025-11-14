@@ -57,6 +57,13 @@ export function GalleryManager() {
       .getGallery()
       .then((data) => {
         if (!mounted) return
+        if (typeof window !== "undefined") {
+          console.groupCollapsed("[GalleryManager] raw image URLs from backend")
+          data.forEach((item) => {
+            console.log(item.id ?? "(new)", item.url)
+          })
+          console.groupEnd()
+        }
         setImages(
           data.map((image) => {
             const normalized = resolveMediaUrl(image.url) ?? image.url ?? undefined

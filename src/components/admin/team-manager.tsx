@@ -57,6 +57,13 @@ export function TeamManager() {
       .getTeam()
       .then((data) => {
         if (!active) return
+        if (typeof window !== "undefined") {
+          console.groupCollapsed("[TeamManager] raw image URLs from backend")
+          data.forEach((member) => {
+            console.log(member.id ?? "(new)", member.imageUrl)
+          })
+          console.groupEnd()
+        }
         setMembers(
           data.map((member) => {
             const normalized = resolveMediaUrl(member.imageUrl) ?? member.imageUrl ?? undefined

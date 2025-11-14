@@ -48,6 +48,13 @@ export function ContentEditor({ section }: ContentEditorProps) {
       .getSections(section)
       .then((data) => {
         if (!isMounted) return
+        if (typeof window !== "undefined") {
+          console.groupCollapsed(`[ContentEditor:${section}] raw image URLs from backend`)
+          data.forEach((item) => {
+            console.log(item.id ?? "(new)", item.imageUrl)
+          })
+          console.groupEnd()
+        }
         setSections(
           data.map((item) => ({
             ...item,

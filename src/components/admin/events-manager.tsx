@@ -57,6 +57,13 @@ export function EventsManager() {
       .getEvents()
       .then((data) => {
         if (!alive) return
+        if (typeof window !== "undefined") {
+          console.groupCollapsed("[EventsManager] raw image URLs from backend")
+          data.forEach((event) => {
+            console.log(event.id ?? "(new)", event.imageUrl)
+          })
+          console.groupEnd()
+        }
         setEvents(
           data.map((event) => ({
             ...event,
