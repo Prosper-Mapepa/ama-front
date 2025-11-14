@@ -583,6 +583,22 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
     }
   }, [curatedGallery.length])
 
+  const upcomingEvents = useMemo(() => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const source = events.length ? events : DEFAULT_EVENTS
+
+    return source
+      .filter((event) => {
+        const date = new Date(event.date)
+        if (Number.isNaN(date.getTime())) return true
+        date.setHours(0, 0, 0, 0)
+        return date >= today
+      })
+      .slice(0, 3)
+  }, [events])
+
   useEffect(() => {
     const heroResolved = hero.imageUrl ? resolveMediaUrl(hero.imageUrl) ?? hero.imageUrl : null
     if (heroResolved) {
@@ -610,22 +626,6 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
     })
     console.groupEnd()
   }, [upcomingEvents])
-
-  const upcomingEvents = useMemo(() => {
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-
-    const source = events.length ? events : DEFAULT_EVENTS
-
-    return source
-      .filter((event) => {
-        const date = new Date(event.date)
-        if (Number.isNaN(date.getTime())) return true
-        date.setHours(0, 0, 0, 0)
-        return date >= today
-      })
-      .slice(0, 3)
-  }, [events])
 
   const heroHeadingParts = useMemo(() => hero.heading.split(/(CMU Chapter)/i), [hero.heading])
 
