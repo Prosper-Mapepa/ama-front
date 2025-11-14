@@ -583,6 +583,34 @@ export function HomePageClient({ sections, events, galleryItems, teamMembers }: 
     }
   }, [curatedGallery.length])
 
+  useEffect(() => {
+    const heroResolved = hero.imageUrl ? resolveMediaUrl(hero.imageUrl) ?? hero.imageUrl : null
+    if (heroResolved) {
+      console.info("[media] Hero image URL:", heroResolved)
+    } else {
+      console.info("[media] Hero image URL: none")
+    }
+
+    if (curatedGallery.length) {
+      console.groupCollapsed("[media] Gallery image URLs")
+      curatedGallery.forEach((item, index) => {
+        console.log(`[media] Gallery[${index}]`, item.src)
+      })
+      console.groupEnd()
+    }
+  }, [hero.imageUrl, curatedGallery])
+
+  useEffect(() => {
+    if (!upcomingEvents.length) return
+
+    console.groupCollapsed("[media] Upcoming event image URLs")
+    upcomingEvents.forEach((event, index) => {
+      const resolved = event.imageUrl ? resolveMediaUrl(event.imageUrl) ?? event.imageUrl : "none"
+      console.log(`[media] Event[${index}]`, resolved)
+    })
+    console.groupEnd()
+  }, [upcomingEvents])
+
   const upcomingEvents = useMemo(() => {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
