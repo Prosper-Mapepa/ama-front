@@ -219,15 +219,20 @@ export function ContentEditor({ section }: ContentEditorProps) {
 
     try {
       let uploadedUrl: string | undefined
+      let uploadedPath: string | undefined
       if (sectionData.pendingFile) {
-        const { url } = await adminApi.uploadImage(sectionData.pendingFile)
+        const { url, path } = await adminApi.uploadImage(sectionData.pendingFile)
         uploadedUrl = url
+        uploadedPath = path
       }
 
       const shouldClearImage =
         !sectionData.pendingFile && (sectionData.previewUrl === null || sectionData.previewUrl === undefined) && !sectionData.imageUrl
       const existingResolved = resolveMediaUrl(sectionData.imageUrl) ?? sectionData.imageUrl ?? null
-      const imageUrlValue = uploadedUrl ?? (shouldClearImage ? null : existingResolved)
+      const imageUrlValue =
+        uploadedPath != null
+          ? `/uploads/${uploadedPath}`
+          : uploadedUrl ?? (shouldClearImage ? null : existingResolved)
       const imageUrlForApi = mediaPathForApi(imageUrlValue)
 
       if (sectionData.pendingFile && sectionData.previewUrl) {

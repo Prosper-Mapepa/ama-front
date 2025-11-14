@@ -225,9 +225,11 @@ export function GalleryManager() {
 
     try {
       let uploadedUrl: string | undefined
+      let uploadedPath: string | undefined
       if (imageRecord.pendingFile) {
-        const { url } = await adminApi.uploadImage(imageRecord.pendingFile)
+        const { url, path } = await adminApi.uploadImage(imageRecord.pendingFile)
         uploadedUrl = url
+        uploadedPath = path
       }
 
       const shouldClearImage =
@@ -235,7 +237,10 @@ export function GalleryManager() {
         (imageRecord.previewUrl === null || imageRecord.previewUrl === undefined) &&
         !imageRecord.url
       const normalizedExisting = resolveMediaUrl(imageRecord.url) ?? imageRecord.url ?? null
-      const urlValue = uploadedUrl ?? (shouldClearImage ? null : normalizedExisting)
+      const urlValue =
+        uploadedPath != null
+          ? `/uploads/${uploadedPath}`
+          : uploadedUrl ?? (shouldClearImage ? null : normalizedExisting)
       const urlForApi = mediaPathForApi(urlValue)
 
       if (!urlValue) {

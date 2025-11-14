@@ -213,9 +213,11 @@ export function EventsManager() {
 
     try {
       let uploadedUrl: string | undefined
+      let uploadedPath: string | undefined
       if (eventRecord.pendingFile) {
-        const { url } = await adminApi.uploadImage(eventRecord.pendingFile)
+        const { url, path } = await adminApi.uploadImage(eventRecord.pendingFile)
         uploadedUrl = url
+        uploadedPath = path
       }
 
       const shouldClearImage =
@@ -223,7 +225,10 @@ export function EventsManager() {
         (eventRecord.previewUrl === null || eventRecord.previewUrl === undefined) &&
         !eventRecord.imageUrl
       const existingResolved = resolveMediaUrl(eventRecord.imageUrl) ?? eventRecord.imageUrl ?? null
-      const imageUrlValue = uploadedUrl ?? (shouldClearImage ? null : existingResolved)
+      const imageUrlValue =
+        uploadedPath != null
+          ? `/uploads/${uploadedPath}`
+          : uploadedUrl ?? (shouldClearImage ? null : existingResolved)
       const imageUrlForApi = mediaPathForApi(imageUrlValue)
 
       if (eventRecord.pendingFile && eventRecord.previewUrl) {
