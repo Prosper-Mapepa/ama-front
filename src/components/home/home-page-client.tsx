@@ -227,7 +227,7 @@ function GalleryCard({ item, priority }: GalleryCardProps) {
             "object-cover transition duration-500 ease-out group-hover:scale-[1.02]",
             isLoaded ? "opacity-100" : "opacity-85 blur-sm",
           )}
-          onLoadingComplete={() => setIsLoaded(true)}
+          onLoad={() => setIsLoaded(true)}
         />
         <div
           className={cn(
