@@ -3,17 +3,22 @@
  * Optimized for Netlify deployments and Render backend
  * Returns true if the backend is accessible and SSL is valid (for HTTPS URLs)
  */
-export async function validateBackendUrl(url: string, timeout = 10000): Promise<{
+export async function validateBackendUrl(url: string, timeout?: number): Promise<{
   valid: boolean
   error?: string
 }> {
+  // Render backends can be slow to wake up (cold starts), use longer timeout
+  const isRenderBackend = url.includes("render.com") || url.includes("onrender.com")
+  const defaultTimeout = isRenderBackend ? 20000 : 15000 // 20s for Render, 15s for others
+  
+  const validationTimeout = timeout ?? defaultTimeout
   try {
     // For production HTTPS URLs (like Render), we want to validate SSL properly
     const isHttps = url.startsWith("https://")
     
     // Optimize timeout for Netlify serverless environment
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), timeout)
+    const timeoutId = setTimeout(() => controller.abort(), validationTimeout)
 
     // Try multiple endpoints in order of preference
     // For Render/Netlify, /settings is a good lightweight endpoint
