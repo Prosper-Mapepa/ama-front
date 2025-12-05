@@ -4,9 +4,9 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "sonner"
 
-
 import "./globals.css"
 import { cn } from "@/lib/utils"
+import { BackendValidator } from "@/components/backend-validator"
 
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist" })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" })
@@ -73,9 +73,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("font-sans antialiased", geistSans.variable, geistMono.variable)}>
-        {children}
-        <Analytics />
-        <Toaster position="top-right" richColors />
+        <BackendValidator>
+          {children}
+          <Analytics />
+          <Toaster position="top-right" richColors />
+        </BackendValidator>
       </body>
     </html>
   )
